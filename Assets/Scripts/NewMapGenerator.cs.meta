@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: af1da1ada90b1c84dba4e141f7c608fb
+timeCreated: 1490807475
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - floor: {instanceID: 0}
+  - wall: {instanceID: 0}
+  - edge: {instanceID: 0}
+  - parallel: {instanceID: 0}
+  - perpendicular: {instanceID: 0}
+  - three: {instanceID: 0}
+  - surrounded: {instanceID: 0}
+  - corner: {instanceID: 0}
+  - tree: {fileID: 1000010931794244, guid: ee57f907a731ce840b8f97ec4c6f34be, type: 2}
+  - chest: {fileID: 1000013880242858, guid: e3974b6482651d14da5fd62b596bc228, type: 2}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
