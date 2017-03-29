@@ -3,9 +3,9 @@ using System.Collections;
 
 public class HealthController : MonoBehaviour {
 
-	[SerializeField]private int healthValue = 100, healthModifier = 100;
+	[SerializeField]private int healthValue = 100, healthMultiplier = 100;
 	private int currentHealth, currentMana;
-	[SerializeField]private int manaValue = 100, manaModifier = 100;
+	[SerializeField]private int manaValue = 100, manaMultiplier = 100;
 
 	[SerializeField] private int damageValue, damageMultiplier;
 	[SerializeField] private int lightningDamageValue, lightningDamageMultiplier;
@@ -21,8 +21,8 @@ public class HealthController : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		currentHealth = healthValue * healthModifier / 100;
-		currentMana = manaValue * manaModifier / 100;
+		currentHealth = healthValue * healthMultiplier / 100;
+		currentMana = manaValue * manaMultiplier / 100;
 	}
 	
 	// Update is called once per frame
@@ -182,5 +182,17 @@ public class HealthController : MonoBehaviour {
 
 	public int GetCurrentMana(){
 		return currentMana;
+	}
+
+	public int GetMaxMana(){
+		return manaValue * manaMultiplier / 100;
+	}
+
+	public int GetCurrentHealth(){
+		return currentHealth;
+	}
+
+	public int GetMaxHealth(){
+		return healthValue * healthMultiplier / 100;
 	}
 }

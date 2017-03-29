@@ -109,4 +109,8 @@ public class WeaponManager : MonoBehaviour {
 		}
 	}
 
+	public WeaponController[] GetEquippedWeapons(){
+		return equippedWeapons;
+	}
+
 }

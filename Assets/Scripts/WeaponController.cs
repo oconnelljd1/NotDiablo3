@@ -6,6 +6,7 @@ public class WeaponController : MonoBehaviour {
 	private Collider hitbox;
 
 	[SerializeField]private Collider myCollider;
+	[SerializeField]private Sprite mySprite;
 
 	[SerializeField]private string ownerTag;
 	[SerializeField]private bool support = false;
@@ -81,6 +82,10 @@ public class WeaponController : MonoBehaviour {
 
 	public float GetReach(){
 		return reach;
+	}
+
+	public Sprite GetSprite(){
+		return mySprite;
 	}
 
 	void OnTriggerEnter(Collider trigger){
