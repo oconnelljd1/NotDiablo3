@@ -358,27 +358,29 @@ public class NewMapGenerator : MonoBehaviour {
 
 	private void GenerateChests(){
 		for(int a = 0; a < chestCount; a ++){
+			Vector3 center = Vector3.zero;
 			for (int e = 0; e < 100; e++) {
-				Vector3 center = new Vector3 (Random.Range (0, width * scale), 0, Random.Range (0, height * scale));
+				center = new Vector3 (Random.Range (0, width * scale), 0, Random.Range (0, height * scale));
 				if (IsEmpty (center)) {
-					GameObject myChest = Instantiate (chest, center, Quaternion.Euler (new Vector3 (0, Random.Range (0, 360), 0))) as GameObject;
-					int myRandom = Random.Range (0, 4);
-					switch (myRandom) {
-					case 3:
-						myRandom = 1;
-						break;
-					default:
-						break;
-					}
-					GameObject[] loot = new GameObject[myRandom];
-					if(myRandom > 0){
-						for(int i = 0; i < myRandom; i ++){
-							loot[i] = availableLoot [Random.Range (0, availableLoot.Length)];
-						}	
-					}
-					myChest.GetComponent<ChestController> ().SetLoot (loot);
+					break;
 				}
 			}
+			GameObject myChest = Instantiate (chest, center, Quaternion.Euler (new Vector3 (0, Random.Range (0, 360), 0))) as GameObject;
+			int myRandom = Random.Range (0, 4);
+			switch (myRandom) {
+			case 3:
+				myRandom = 1;
+				break;
+			default:
+				break;
+			}
+			GameObject[] loot = new GameObject[myRandom];
+			if(myRandom > 0){
+				for(int i = 0; i < myRandom; i ++){
+					loot[i] = availableLoot [Random.Range (0, availableLoot.Length)];
+				}
+			}
+			myChest.GetComponent<ChestController> ().SetLoot (loot);
 		}
 	}
 }

@@ -26,12 +26,15 @@ public class PackEnemyAI : MonoBehaviour {
 	private UnityAction PackEnemyDeath;
 	private bool dead = false;
 
+	void Awake(){
+		publicFunctions = new PublicFunctions();
+	}
+
 	// Use this for initialization
 	void Start () {
 		CheckForAllies ();
 		weapon = transform.GetChild (0).gameObject;
 		myHealth = GetComponent<HealthController> ();
-		publicFunctions = new PublicFunctions();
 	}
 	
 	// Update is called once per frame
@@ -81,7 +84,7 @@ public class PackEnemyAI : MonoBehaviour {
 	}
 
 	void OnTriggerExit(Collider trigger){
-		if (publicFunctions.ExitTrigger(trigger, myRadius)) {
+		if (publicFunctions.ExitTrigger (trigger, myRadius, gameObject)) {
 			target = null;
 			aggro = false;
 		}

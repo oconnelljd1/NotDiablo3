@@ -97,20 +97,28 @@ public class WeaponManager : MonoBehaviour {
 
 	public void TryAttack(){
 		if(Time.time > lastAttack +lastWeapon.GetAttackDelay()){
-			if (!nextWeapon) {
-				nextWeapon = equippedWeapons [0];
-			}
 			if (nextWeapon.GetManaCost () <= myHealthController.GetCurrentMana ()) {
 				nextWeapon.Attack ();
 				lastWeapon = nextWeapon;
 				lastAttack = Time.time;
-				nextWeapon = null;
+				nextWeapon = equippedWeapons [0];
 			}
 		}
 	}
 
 	public WeaponController[] GetEquippedWeapons(){
 		return equippedWeapons;
+	}
+
+	public int GetNextWeapon(){
+		for(int i = 0;i < 7; i++){
+			if(equippedWeapons[i]){
+				if(equippedWeapons[i] == nextWeapon){
+					return i;
+				}
+			}
+		}
+		return 0;
 	}
 
 }

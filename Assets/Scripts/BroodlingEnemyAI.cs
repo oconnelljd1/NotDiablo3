@@ -16,10 +16,13 @@ public class BroodlingEnemyAI : MonoBehaviour {
 	private PublicFunctions publicFunctions;
 	[SerializeField]private SphereCollider myRadius;
 
+	void Awake(){
+		publicFunctions = new PublicFunctions();
+	}
+
 	// Use this for initialization
 	void Start () {
 		myHealth = GetComponent<HealthController> ();
-		publicFunctions = new PublicFunctions();
 		weapon = transform.GetChild (0).gameObject;
 	}
 	
@@ -44,9 +47,11 @@ public class BroodlingEnemyAI : MonoBehaviour {
 	}
 
 	void OnTriggerExit(Collider trigger){
-		if (publicFunctions.ExitTrigger(trigger, myRadius)) {
-			target = null;
-			aggro = false;
+		if (trigger && target) {
+			if (publicFunctions.ExitTrigger (trigger, myRadius, gameObject)) {
+				target = null;
+				aggro = false;
+			}
 		}
 	}
 

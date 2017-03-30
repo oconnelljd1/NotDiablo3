@@ -5,6 +5,7 @@ using System.Collections;
 public class GUIController : MonoBehaviour {
 
 	[SerializeField]private Image health, mana;
+	[SerializeField]private RectTransform highlighter;
 	[SerializeField]private Image[] weapons;
 	[SerializeField]private HealthController playerHealth;
 
@@ -21,6 +22,7 @@ public class GUIController : MonoBehaviour {
 				weapons [i].sprite = equippedWeapons[i].GetSprite ();
 			}
 		}
+		highlighter.anchoredPosition = weapons [WeaponManager.instance.GetNextWeapon ()].GetComponent<RectTransform> ().anchoredPosition;
 
 		health.fillAmount = playerHealth.GetCurrentHealth () / playerHealth.GetMaxHealth ();
 		mana.fillAmount = playerHealth.GetCurrentMana () / playerHealth.GetMaxMana ();

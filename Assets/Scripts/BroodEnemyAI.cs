@@ -18,11 +18,13 @@ public class BroodEnemyAI : MonoBehaviour {
 	private PublicFunctions publicFunctions;
 	[SerializeField]private SphereCollider myRadius;
 
+	void Awake(){
+		publicFunctions = new PublicFunctions();
+	}
+
 	// Use this for initialization
 	void Start () {
-
 		myHealth = GetComponent<HealthController> ();
-		publicFunctions = new PublicFunctions();
 	}
 	
 	// Update is called once per frame
@@ -47,9 +49,11 @@ public class BroodEnemyAI : MonoBehaviour {
 	}
 
 	void OnTriggerExit(Collider trigger){
-		if (publicFunctions.ExitTrigger(trigger, myRadius)) {
-			target = null;
-			aggro = false;
+		if (trigger && target) {
+			if (publicFunctions.ExitTrigger (trigger, myRadius, gameObject)) {
+				target = null;
+				aggro = false;
+			}
 		}
 	}
 

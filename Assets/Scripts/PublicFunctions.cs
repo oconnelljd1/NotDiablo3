@@ -42,11 +42,11 @@ public class PublicFunctions : MonoBehaviour {
 		_victim.transform.position = Vector3.MoveTowards (_victim.transform.position, _target, _moveSpeed *Time.deltaTime);
 	}
 
-	public bool ExitTrigger(Collider trigger, SphereCollider _radius){
+	public bool ExitTrigger(Collider trigger, SphereCollider _radius, GameObject _this){
 		if(trigger.CompareTag("Player")){
-			Vector3 Vdistance = transform.position - trigger.gameObject.transform.position;
+			Vector3 Vdistance = _this.transform.position - trigger.gameObject.transform.position;
 			float distance = Vdistance.sqrMagnitude;
-			if (distance > 5) {
+			if (distance > _radius.radius) {
 				return true;
 			}
 		}
