@@ -3,6 +3,9 @@ using System.Collections;
 
 public class EquipmentController : MonoBehaviour {
 
+	[SerializeField]private int healthValue, healthMultiplier;
+	[SerializeField]private int manaValue, manaMultiplier;
+
 	[SerializeField]private int damageValue, damageMultiplier;
 	[SerializeField]private int lightningDamageValue, lightningDamageMultiplier;
 	[SerializeField]private int fireDamageValue, fireDamageMultiplier;
@@ -36,6 +39,23 @@ public class EquipmentController : MonoBehaviour {
 	public bool GetTwohanded(){
 		return twoHanded;
 	}
+
+	public int GetHealthValue(){
+		return healthValue;
+	}
+
+	public int GetHealthMultiplier(){
+		return healthMultiplier;
+	}
+
+	public int GetManaValue(){
+		return manaValue;
+	}
+
+	public int GetManaMultiplier(){
+		return manaMultiplier;
+	}
+
 
 	public int GetDamageValue(){
 		return damageValue;

@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -8,6 +9,7 @@ public class WeaponManager : MonoBehaviour {
 
 	private WeaponController[] equippedWeapons = new WeaponController[7];
 	private List<WeaponController> weapons = new List<WeaponController>(){null, null, null, null, null, null, null, null, null, null};
+	[SerializeField]private Image[] weaponImages;
 
 	private WeaponController lastWeapon, nextWeapon, currentWeapon;
 	private float lastAttack;
@@ -87,12 +89,16 @@ public class WeaponManager : MonoBehaviour {
 		equippedWeapons [0] = _weaponC;
 	}
 
-	public void UnequipPrimary(){
-		equippedWeapons [0] = null;
+	public void UnequipWeapon(int _index){
+		equippedWeapons [_index] = null;
 	}
 
 	public float GetPrimarySqrRange(){
-		return Mathf.Pow(weapons [0].GetReach (),2);
+		if (weapons [0]) {
+			return Mathf.Pow (weapons [0].GetReach (), 2);
+		} else {
+			return 0;
+		}
 	}
 
 	public void TryAttack(){
@@ -119,6 +125,10 @@ public class WeaponManager : MonoBehaviour {
 			}
 		}
 		return 0;
+	}
+
+	public WeaponController GetPrimaryWeapon(){
+		return equippedWeapons [0];
 	}
 
 }

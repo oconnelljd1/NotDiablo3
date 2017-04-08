@@ -9,6 +9,8 @@ public class BroodlingEnemyAI : MonoBehaviour {
 	private GameObject target;
 	[SerializeField]private float moveSpeed = 1;
 	private GameObject weapon;
+	private float attackDelay;
+	private float lastAttack;
 
 	private HealthController myHealth;
 	[SerializeField]private WeaponController[] weapons;
@@ -29,12 +31,12 @@ public class BroodlingEnemyAI : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		WeaponController selectedAttack = null;
-		if(target != null){
-			selectedAttack = publicFunctions.AttackFuntcion (weapons, GetComponent<HealthController> (), Vector3.Distance(transform.position, target.transform.position));
-			if (selectedAttack == null) {
-				publicFunctions.MoveTowards (gameObject, target.transform.position, moveSpeed);
-			} else {
+		if (target != null) {
+			selectedAttack = publicFunctions.AttackFuntcion (weapons, myHealth, Vector3.Distance (transform.position, target.transform.position), lastAttack + attackDelay);
+			if (selectedAttack) {
 				selectedAttack.Attack ();
+				attackDelay = selectedAttack.GetAttackDelay ();
+				lastAttack = Time.time;
 			}
 		}
 	}

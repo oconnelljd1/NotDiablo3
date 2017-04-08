@@ -17,7 +17,7 @@ public class HealthController : MonoBehaviour {
 	[SerializeField] private int fireArmorValue, fireArmorMultiplier;
 	[SerializeField] private int iceArmorValue, iceArmorMultiplier;
 
-
+	[SerializeField]private int givenExperience;
 
 	// Use this for initialization
 	void Start () {
@@ -33,6 +33,7 @@ public class HealthController : MonoBehaviour {
 	public void Damage (int _damage) {
 		currentHealth -= _damage;
 		if(currentHealth < 1){
+			ExperienceManager.instance.GetExperience (givenExperience);
 			Object.Destroy (gameObject);
 		}
 	}
@@ -42,6 +43,12 @@ public class HealthController : MonoBehaviour {
 	}
 
 	public void ChangeStats(EquipmentController _equipment, int _posNeg){
+		Debug.Log (_equipment.gameObject);
+		healthValue += _equipment.GetHealthValue () * _posNeg;
+		healthMultiplier += _equipment.GetHealthMultiplier () * _posNeg;
+		manaValue += _equipment.GetManaValue () * _posNeg;
+		manaMultiplier += _equipment.GetManaMultiplier () * _posNeg;
+
 		damageValue += _equipment.GetDamageValue() * _posNeg;
 		lightningDamageValue += _equipment.GetLightningDamageValue () * _posNeg;
 		fireDamageValue += _equipment.GetFireDamageValue () * _posNeg;
@@ -61,6 +68,49 @@ public class HealthController : MonoBehaviour {
 		lightningArmorMultiplier += _equipment.GetLightningArmorMultiplier () * _posNeg;
 		fireArmorMultiplier += _equipment.GetFireArmorMultiplier () * _posNeg;
 		iceArmorMultiplier += _equipment.GetIceArmorMultiplier () * _posNeg;
+	}
+
+	public void BoostStats(WeaponController _weapon, int _posNeg){
+		healthValue += _weapon.GetHealthValue () * _posNeg;
+		healthMultiplier += _weapon.GetHealthMultiplier () * _posNeg;
+		manaValue += _weapon.GetManaValue () * _posNeg;
+		manaMultiplier += _weapon.GetManaMultiplier () * _posNeg;
+
+		damageValue += _weapon.GetDamageValue() * _posNeg;
+		lightningDamageValue += _weapon.GetLightningDamageValue () * _posNeg;
+		fireDamageValue += _weapon.GetFireDamageValue () * _posNeg;
+		iceDamageValue += _weapon.GetIceDamageValue () * _posNeg;
+
+		armorValue += _weapon.GetArmorValue () * _posNeg;
+		lightningArmorValue += _weapon.GetLightningArmorValue () * _posNeg;
+		fireArmorValue += _weapon.GetFireArmorValue () * _posNeg;
+		iceArmorValue += _weapon.GetIceArmorValue () * _posNeg;
+
+		damageMultiplier += _weapon.GetDamageMultiplier () * _posNeg;
+		lightningDamageMultiplier += _weapon.GetLightningDamageMultiplier () * _posNeg;
+		fireDamageMultiplier += _weapon.GetLightningDamageMultiplier () * _posNeg;
+		iceDamageMultiplier += _weapon.GetIceDamageMultiplier () * _posNeg;
+
+		armorMultiplier += _weapon.GetArmorMultiplier () * _posNeg;
+		lightningArmorMultiplier += _weapon.GetLightningArmorMultiplier () * _posNeg;
+		fireArmorMultiplier += _weapon.GetFireArmorMultiplier () * _posNeg;
+		iceArmorMultiplier += _weapon.GetIceArmorMultiplier () * _posNeg;
+	}
+
+	public int GetCurrentMana(){
+		return currentMana;
+	}
+
+	public int GetMaxMana(){
+		return manaValue * manaMultiplier / 100;
+	}
+
+	public int GetCurrentHealth(){
+		return currentHealth;
+	}
+
+	public int GetMaxHealth(){
+		return healthValue * healthMultiplier / 100;
 	}
 
 	public int GetDamageValue(){
@@ -158,41 +208,84 @@ public class HealthController : MonoBehaviour {
 		return iceArmorValue * iceArmorMultiplier / 100;
 	}
 
-	public void BoostStats(WeaponController _weapon, int _posNeg){
-		damageValue += _weapon.GetDamageValue() * _posNeg;
-		lightningDamageValue += _weapon.GetLightningDamageValue () * _posNeg;
-		fireDamageValue += _weapon.GetFireDamageValue () * _posNeg;
-		iceDamageValue += _weapon.GetIceDamageValue () * _posNeg;
-
-		armorValue += _weapon.GetArmorValue () * _posNeg;
-		lightningArmorValue += _weapon.GetLightningArmorValue () * _posNeg;
-		fireArmorValue += _weapon.GetFireArmorValue () * _posNeg;
-		iceArmorValue += _weapon.GetIceArmorValue () * _posNeg;
-
-		damageMultiplier += _weapon.GetDamageMultiplier () * _posNeg;
-		lightningDamageMultiplier += _weapon.GetLightningDamageMultiplier () * _posNeg;
-		fireDamageMultiplier += _weapon.GetLightningDamageMultiplier () * _posNeg;
-		iceDamageMultiplier += _weapon.GetIceDamageMultiplier () * _posNeg;
-
-		armorMultiplier += _weapon.GetArmorMultiplier () * _posNeg;
-		lightningArmorMultiplier += _weapon.GetLightningArmorMultiplier () * _posNeg;
-		fireArmorMultiplier += _weapon.GetFireArmorMultiplier () * _posNeg;
-		iceArmorMultiplier += _weapon.GetIceArmorMultiplier () * _posNeg;
+	public void ChangeHealthValue(int _value, int _posNeg){
+		healthValue += _value * _posNeg;
 	}
 
-	public int GetCurrentMana(){
-		return currentMana;
+	public void ChangeHealthMultiplier(int _value, int _posNeg){
+		healthMultiplier += _value * _posNeg;
 	}
 
-	public int GetMaxMana(){
-		return manaValue * manaMultiplier / 100;
+	public void ChangeManaValue(int _value, int _posNeg){
+		manaValue += _value * _posNeg;
 	}
 
-	public int GetCurrentHealth(){
-		return currentHealth;
+	public void ChangeManaMultiplier(int _value, int _posNeg){
+		manaMultiplier += _value * _posNeg;
 	}
 
-	public int GetMaxHealth(){
-		return healthValue * healthMultiplier / 100;
+	public void ChangeDamageValue(int _value, int _posNeg){
+		damageValue += _value * _posNeg;
 	}
+
+	public void ChangeLightningDamageValue(int _value, int _posNeg){
+		lightningDamageValue += _value * _posNeg;
+	}
+
+	public void ChangeFireDamageValue(int _value, int _posNeg){
+		fireDamageValue += _value * _posNeg;
+	}
+
+	public void ChangeIceDamageValue(int _value, int _posNeg){
+		iceDamageValue += _value * _posNeg;
+	}
+
+	public void ChangeDamageMultiplier(int _value, int _posNeg){
+		damageMultiplier += _value * _posNeg;
+	}
+
+	public void ChangeLightningDamageMultiplier(int _value, int _posNeg){
+		lightningDamageMultiplier += _value * _posNeg;
+	}
+
+	public void ChangeFireDamageMultiplier(int _value, int _posNeg){
+		fireDamageMultiplier += _value * _posNeg;
+	}
+
+	public void ChangeIceDamageMultiplier(int _value, int _posNeg){
+		iceDamageMultiplier += _value * _posNeg;
+	}
+
+	public void ChangeArmorValue(int _value, int _posNeg){
+		armorValue += _value * _posNeg;
+	}
+
+	public void ChangeLightningArmorValue(int _value, int _posNeg){
+		lightningArmorValue += _value * _posNeg;
+	}
+
+	public void ChangeFireArmorValue(int _value, int _posNeg){
+		fireArmorValue += _value * _posNeg;
+	}
+
+	public void ChangeIceArmorValue(int _value, int _posNeg){
+		iceArmorValue += _value * _posNeg;
+	}
+
+	public void ChangeArmorMultiplier(int _value, int _posNeg){
+		armorMultiplier += _value * _posNeg;
+	}
+
+	public void ChangeLightningArmorMultiplier(int _value, int _posNeg){
+		lightningArmorMultiplier += _value * _posNeg;
+	}
+
+	public void ChangeFireArmorMultiplier(int _value, int _posNeg){
+		fireArmorMultiplier += _value * _posNeg;
+	}
+
+	public void ChangeIceArmorMultiplier(int _value, int _posNeg){
+		iceArmorMultiplier += _value * _posNeg;
+	}
+
 }

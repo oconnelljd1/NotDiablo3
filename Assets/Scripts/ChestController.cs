@@ -15,7 +15,8 @@ public class ChestController : MonoBehaviour {
 		
 	}
 
-	void Open(){
+	public void Open(){
+		Debug.Log ("Open chest" + loot.Length);
 		if(loot.Length> 0){
 			for(int i = 0; i< loot.Length; i++){
 				loot [i].SetActive (true);

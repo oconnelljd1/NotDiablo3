@@ -41,6 +41,11 @@ public class ScrollabelInventory : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		CreateExtraInventorySlotsInWindow ();
+		//UpdateInventory ();
+	}
+
+	void OnEnable(){
+		UpdateInventory ();
 	}
 	
 	// Update is called once per frame
@@ -83,6 +88,17 @@ public class ScrollabelInventory : MonoBehaviour {
 				Object.Destroy (slots[i]);
 			}
 			slots.RemoveRange (invLength * width, slots.Count -1);
+		}
+	}
+
+	public void UpdateInventory(){
+		List<ItemController> myInventory = ItemManager.instance.GetInventory ();
+		for(int i = 0; i < slots.Count + preLength; i++){
+			if(i < myInventory.Count){
+				content.transform.GetChild (i).gameObject.GetComponent<Image> ().sprite = myInventory [i].GetSprite ();
+			} else {
+				content.transform.GetChild (i).gameObject.GetComponent<Image> ().sprite = null;
+			}
 		}
 	}
 

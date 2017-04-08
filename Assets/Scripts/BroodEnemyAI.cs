@@ -8,6 +8,8 @@ public class BroodEnemyAI : MonoBehaviour {
 	[SerializeField]private float reach = 1;
 	[SerializeField]private float moveSpeed = 1;
 	[SerializeField]private WeaponController[] weapons;
+	private float attackDelay;
+	private float lastAttack;
 
 	private HealthController myHealth;
 	private float eggTimeDelay = 5;
@@ -31,12 +33,12 @@ public class BroodEnemyAI : MonoBehaviour {
 	void Update () {
 		WeaponController selectedAttack = null;
 		LayEgg ();
-		if(target != null){
-			selectedAttack = publicFunctions.AttackFuntcion (weapons, GetComponent<HealthController> (), Vector3.Distance(transform.position, target.transform.position));
-			if (selectedAttack == null) {
-				publicFunctions.MoveTowards (gameObject, target.transform.position, moveSpeed);
-			} else {
+		if (target != null) {
+			selectedAttack = publicFunctions.AttackFuntcion (weapons, myHealth, Vector3.Distance (transform.position, target.transform.position), lastAttack + attackDelay);
+			if (selectedAttack) {
 				selectedAttack.Attack ();
+				attackDelay = selectedAttack.GetAttackDelay ();
+				lastAttack = Time.time;
 			}
 		}
 	}

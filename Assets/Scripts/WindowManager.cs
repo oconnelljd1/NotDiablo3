@@ -3,12 +3,23 @@ using System.Collections;
 
 public class WindowManager : MonoBehaviour {
 
-	[SerializeField]private GameObject inventory, character, map, quests;
+	public static WindowManager instance;
+
+	[SerializeField]private GameObject eventSystem;
+	[SerializeField]private GameObject inventory, character, map, quests, skillTree;
 	private ScrollabelInventory myInv;
 	private CharacterScreenController myChar;
 
 	// Use this for initialization
 	void Start () {
+		if (instance) {
+			Object.Destroy (gameObject);
+		} else {
+			instance = this;
+			DontDestroyOnLoad (gameObject);
+			DontDestroyOnLoad (eventSystem.gameObject);
+		}
+
 		myInv = inventory.GetComponent<ScrollabelInventory> ();
 		myChar = character.GetComponent<CharacterScreenController> ();
 	}
@@ -26,9 +37,11 @@ public class WindowManager : MonoBehaviour {
 				myChar.SetStatTexts ();
 			}
 		}else if(Input.GetKeyDown(KeyCode.M)){
-			map.SetActive (!character.activeInHierarchy);
+			map.SetActive (!map.activeInHierarchy);
 		}else if(Input.GetKeyDown(KeyCode.B)){
-			quests.SetActive (!character.activeInHierarchy);
+			quests.SetActive (!quests.activeInHierarchy);
+		}else if(Input.GetKeyDown(KeyCode.Z)){
+			skillTree.SetActive (!skillTree.activeInHierarchy);
 		}
 	}
 
@@ -49,6 +62,10 @@ public class WindowManager : MonoBehaviour {
 
 	public void CloseQuests(){
 		quests.SetActive (false);
+	}
+
+	public GameObject GetEventSystem(){
+		return eventSystem;
 	}
 
 }

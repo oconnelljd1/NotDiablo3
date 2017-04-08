@@ -7,6 +7,7 @@ public class ProjectileController : MonoBehaviour {
 	[SerializeField]private float moveSpeed;
 	private int power;
 	private GameObject parent;
+	[SerializeField]private int pierces;
 
 	// Use this for initialization
 	void Start () {
@@ -20,13 +21,20 @@ public class ProjectileController : MonoBehaviour {
 
 	void OnTriggerEnter(Collider trigger){
 		if(trigger.gameObject != parent){
-			Object.Destroy (gameObject);
+			if(!trigger.isTrigger){
+				pierces--;
+				if(pierces < 0){
+					Object.Destroy (gameObject);
+				}
+			}
+
 		}
 	}
 
-	public void SetStuff(GameObject _parent){
+	public void SetStuff(GameObject _parent, int _pierces){
 		ownerTag = _parent.tag;
 		parent = _parent;
+		pierces = _pierces;
 	}
 
 }

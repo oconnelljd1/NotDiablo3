@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.EventSystems;
 using System.Collections.Generic;
 
 public class PlayerController : MonoBehaviour {
@@ -41,35 +42,37 @@ public class PlayerController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(Input.GetMouseButtonDown(0)){
-			RaycastHit hit;
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-			Debug.DrawRay (ray.origin, ray.direction * Mathf.Infinity, Color.red);
-			if(Physics.Raycast(ray.origin, ray.direction, out hit, Mathf.Infinity, myLayerMask, QueryTriggerInteraction.Ignore)){
-				path = new List<Vector3> ();
-				here = false;
-				targetObject = null;
-				targetPos = Vector3.zero;
-				Debug.Log ("hit " + hit.collider.gameObject.tag);
-				if (hit.collider.gameObject.tag == "Ground") {
-					targetPos = hit.point;
-				} else if (hit.collider.gameObject.tag == "Enemy" || hit.collider.gameObject.tag == "Item") {
-					targetObject = hit.collider.gameObject;
+			if(!EventSystem.current.IsPointerOverGameObject()){
+				RaycastHit hit;
+				Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+				Debug.DrawRay (ray.origin, ray.direction * Mathf.Infinity, Color.red);
+				if(Physics.Raycast(ray.origin, ray.direction, out hit, Mathf.Infinity, myLayerMask, QueryTriggerInteraction.Ignore)){
+					path = new List<Vector3> ();
+					here = false;
+					targetObject = null;
+					targetPos = Vector3.zero;
+					Debug.Log ("hit " + hit.collider.gameObject.tag);
+					if (hit.collider.gameObject.tag == "Ground") {
+						targetPos = hit.point;
+					} else if (hit.collider.tag == "Enemy" || hit.collider.tag == "Item" || hit.collider.tag == "Chest") {
+						targetObject = hit.collider.gameObject;
+						targetPos = targetObject.transform.position;
+						targetNode = pathfinder.NodeFormWolrdPoint (targetPos);
+					}else if(hit.collider.CompareTag("Player")){
+						here = true;
+					}
+					if(pathfinder.NodeFormWolrdPoint(transform.position) != pathfinder.NodeFormWolrdPoint(targetPos)){
+						path = pathfinder.FindPath(transform.position, targetPos);
+					}
+					path.Add (targetPos);
+					currentTarget = 0;
+				}
+				if(targetObject &&targetObject.tag == "Enemy"){
 					targetPos = targetObject.transform.position;
-					targetNode = pathfinder.NodeFormWolrdPoint (targetPos);
-				}else if(hit.collider.CompareTag("Player")){
-					here = true;
-				}
-				if(pathfinder.NodeFormWolrdPoint(transform.position) != pathfinder.NodeFormWolrdPoint(targetPos)){
-					path = pathfinder.FindPath(transform.position, targetPos);
-				}
-				path.Add (targetPos);
-				currentTarget = 0;
-			}
-			if(targetObject &&targetObject.tag == "Enemy"){
-				targetPos = targetObject.transform.position;
-				path [path.Count - 1] = targetPos;
-				if(targetNode != pathfinder.NodeFormWolrdPoint (targetPos)){
-					path = pathfinder.FindPath(transform.position, targetPos);
+					path [path.Count - 1] = targetPos;
+					if(targetNode != pathfinder.NodeFormWolrdPoint (targetPos)){
+						path = pathfinder.FindPath(transform.position, targetPos);
+					}
 				}
 			}
 		}
@@ -103,8 +106,16 @@ public class PlayerController : MonoBehaviour {
 					return;
 				}
 			} else if (targetObject.tag == "Item") {
-				if (Displacement.sqrMagnitude < 0.25f) {
-					ItemManager.instance.AddItemToInventory (targetObject.GetComponent<ItemController> ());
+				if (Displacement.sqrMagnitude < 0.5f) {
+					ItemManager.instance.AddItemToInventory (targetObject.GetComponentInParent<ItemController> ());
+					here = true;
+					return;
+				}
+			} else if (targetObject.tag == "Chest"){
+				Debug.Log (Displacement.sqrMagnitude);
+				if(Displacement.sqrMagnitude < 1.25){
+					Debug.Log ("FoundChest");
+					targetObject.GetComponent<ChestController> ().Open ();
 					here = true;
 					return;
 				}

@@ -11,6 +11,7 @@ public class ItemManager : MonoBehaviour {
 	private int currentInt;
 
 	private List<ItemController> inventory = new List<ItemController>();
+	[SerializeField]private ScrollabelInventory myScrollInv;
 
 	//[SerializeField] private GameObject image;
 	//[SerializeField] private GameObject inv;
@@ -54,23 +55,29 @@ public class ItemManager : MonoBehaviour {
 			inventory [currentInt] = tempItem;
 			currentItem = null;
 		} else {
-			currentItem = inventory [_index];
-			currentInt = _index;
+			if (_index<inventory.Count) {
+				currentItem = inventory [_index];
+				currentInt = _index;
+			}
 		}
+		Debug.Log (currentItem);
+		myScrollInv.UpdateInventory ();
 	}
 
 	public void InteractWithEquipment(int _index){
 		if (currentItem) {
-			EquipmentController currentEquip = currentItem.gameObject.GetComponent<EquipmentController> ();
-			if (currentEquip) {
+			if (currentItem.gameObject.GetComponent<EquipmentController> ()) {
+				EquipmentController currentEquip = currentItem.gameObject.GetComponent<EquipmentController> ();
 				EquipmentManager.instance.Equip (_index, currentEquip);
 			}
 			currentItem = null;
 		} else {
-			WeaponManager.instance.UnequipPrimary ();
-			inventory.Add (EquipmentManager.instance.GetEquipment (_index).gameObject.GetComponent<ItemController>());
-			EquipmentManager.instance.UnEquip (_index);
+			if(_index == 8 || _index == 9){
+				WeaponManager.instance.UnequipWeapon (0);
+			}
+			currentItem = null;
 		}
+		myScrollInv.UpdateInventory ();
 	}
 
 	public int GetInventoryCount(){
@@ -82,7 +89,15 @@ public class ItemManager : MonoBehaviour {
 		_itemC.gameObject.transform.SetParent (transform.GetChild(0).transform);
 		_itemC.gameObject.transform.localPosition = Vector3.zero;
 		_itemC.gameObject.transform.localRotation = Quaternion.Euler (Vector3.zero);
-		_itemC.gameObject.SetActive (false);
+		_itemC.gameObject.transform.GetChild(0).gameObject.SetActive (false);
+	}
+
+	public void RemoveItem(ItemController _itemC){
+		inventory.Remove (_itemC);
+	}
+
+	public List<ItemController> GetInventory	(){
+		return inventory;
 	}
 
 }

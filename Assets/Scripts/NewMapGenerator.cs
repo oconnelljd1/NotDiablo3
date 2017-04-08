@@ -377,7 +377,8 @@ public class NewMapGenerator : MonoBehaviour {
 			GameObject[] loot = new GameObject[myRandom];
 			if(myRandom > 0){
 				for(int i = 0; i < myRandom; i ++){
-					loot[i] = availableLoot [Random.Range (0, availableLoot.Length)];
+					loot[i] = Object.Instantiate(availableLoot [Random.Range (0, availableLoot.Length)], center, Quaternion.Euler(Vector3.zero)) as GameObject;
+					loot [i].SetActive (false);
 				}
 			}
 			myChest.GetComponent<ChestController> ().SetLoot (loot);

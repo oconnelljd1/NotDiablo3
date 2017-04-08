@@ -13,9 +13,8 @@ public class PackEnemyAI : MonoBehaviour {
 	[SerializeField]private float moveSpeed;
 	[SerializeField]private WeaponController[] weapons;
 	[SerializeField]private SphereCollider myRadius;
-	private float attackDelay = 1.5f;
-	private float lastAttack = 0;
-	private GameObject weapon;
+	private float attackDelay;
+	private float lastAttack;
 
 	private HealthController myHealth;
 
@@ -33,7 +32,6 @@ public class PackEnemyAI : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		CheckForAllies ();
-		weapon = transform.GetChild (0).gameObject;
 		myHealth = GetComponent<HealthController> ();
 	}
 	
@@ -41,29 +39,24 @@ public class PackEnemyAI : MonoBehaviour {
 	void Update () {
 		WeaponController selectedAttack = null;
 		if(desperate){
-			if (closestAlly != null) {
+			if (closestAlly) {
 				publicFunctions.MoveTowards (gameObject, closestAlly.transform.position, moveSpeed);
 				Vector3 displacement = transform.position - closestAlly.transform.position; 
-				if(displacement.sqrMagnitude < 25){
+				if (displacement.sqrMagnitude < 25) {
 					desperate = false;
 				}
-			} else {
-				if(target != null){
-					selectedAttack = publicFunctions.AttackFuntcion (weapons, myHealth, Vector3.Distance(transform.position, target.transform.position));
-					if (selectedAttack == null) {
-						publicFunctions.MoveTowards (gameObject, target.transform.position, moveSpeed);
-					} else {
-						selectedAttack.Attack ();
-					}
-				}
+				return;
 			}
-		}else if(aggro){
-			selectedAttack = publicFunctions.AttackFuntcion (weapons, myHealth, Vector3.Distance(transform.position, target.transform.position));
-			if (selectedAttack == null) {
-				publicFunctions.MoveTowards (gameObject, target.transform.position, moveSpeed);
-			} else {
+		}
+		if(target != null){
+			selectedAttack = publicFunctions.AttackFuntcion (weapons, myHealth, Vector3.Distance(transform.position, target.transform.position), lastAttack + attackDelay);
+			if (selectedAttack) {
 				selectedAttack.Attack ();
+				attackDelay = selectedAttack.GetAttackDelay ();
+				lastAttack = Time.time;
+				return;
 			}
+			publicFunctions.MoveTowards (gameObject, target.transform.position, moveSpeed);
 		}
 	}
 
